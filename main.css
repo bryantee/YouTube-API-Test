@@ -1,0 +1,61 @@
+body {
+	text-align: center;
+	margin: 0;
+	font-family: 'Open Sans', sans-serif;
+	color: white;
+}
+
+.search-field {
+	height: 115px;
+	width: 100%;
+	background-color: #E62117;
+	font-size: 1.35em;
+}
+
+.search-field input {
+	margin: 35px 0;
+}
+
+.search-field .text {
+	height: 35px;
+	width: 220px;
+	font-size: 1.3em;
+}
+
+input.go-button {
+	height: 40px;
+	width: 65px;
+	background-color: #448AFF;
+	color: white;
+	font-size: .7em;
+	margin-left: 1em;
+	vertical-align: top;
+}
+
+.video-card {
+	background-color: white;
+	border: 1px solid grey;
+	max-width: 450px;
+	margin: 10px auto;
+	border-radius: 5px;
+}
+
+.top-section {
+	background-color: #F44336; 
+}
+
+p.title {
+	font-size: 1.3em;
+	font-weight: 500;
+	margin: 0;
+	padding: .5em;
+}
+
+p.description {
+	text-align: left;
+	padding-left: 1em;
+	padding-right: 1em;
+	padding-bottom: 1em;
+	margin-top: 0em;
+	font-size: .75em;
+}
