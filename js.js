@@ -1,51 +1,61 @@
 $(document).ready(function() {
+	var myModel = new YoutubeModel();
+	var myView = new YoutubeView(myModel);
 
 	$('.go-button').on('click', function() {
 		console.log('Button clicked');
-		getSearchTerm();
+		myView.search();
 	});
-
 });
 
-
-function getSearchTerm() {
-// called from click event
-
-	var searchTerm = $('.text').val();
-	getRequest(searchTerm);
+// state object
+var state = {
+searchTerm: "",
+results: []
 };
 
-function getRequest(searchTerm) {
-// cal to API
+var YoutubeModel = function(){
+	this.getRequest = function(showResults) {
+		// cal to API
+		// set some params
+		var params = {
+			part: 'snippet',
+			q: state.searchTerm,
+			maxResults: 5,
+			key: 'AIzaSyBcHFW3bqFau0HKNVQWHMaJ9-StZxMeVXc'
+		};
+		url = 'https://www.googleapis.com/youtube/v3/search';
 
-	// set some params
-	var params = {
-		part: 'snippet',
-		q: searchTerm,
-		maxResults: 5,
-		key: 'AIzaSyBcHFW3bqFau0HKNVQWHMaJ9-StZxMeVXc'
+		// the actual call
+		$.getJSON(url, params, function(data) {
+			console.log('sucess');
+			state.items = data.items;
+			showResults();
+		});
 	};
-	url = 'https://www.googleapis.com/youtube/v3/search';
+}
 
-	// the actual call
-	$.getJSON(url, params, function(data) {
-		console.log('sucess');
-		showResults(data);
-	});
+YoutubeModel.prototype.getSearchTerm = function() {
+	state.searchTerm = $('.text').val();
 };
 
-function showResults(data) {
-// prints results to page
-
-	// clear out search-results div first
-	$('.search-results').empty();
-	// start the print of each video
-	// thumb, url link, description
-	for (item in data.items) {
-		var videoId = data.items[item].id.videoId;
-		var videoURL = 'https://www.youtube.com/watch?v=' + videoId;
-		var item = data.items[item].snippet;
-		$('.search-results').append("<div class='video-card'>" + "<div class='top-section'>" + "<p class='title'>" + item.title + "</p>" + "<p class='description'>" + item.description + "</p>" + "</div>" + "<a href='" + videoURL + "'>" + "<img src='" + item.thumbnails.medium.url + "'>" + "</a>" + "<div>");
+var YoutubeView = function(model){
+	this.model = model;
+	this.search = function () {
+		this.model.getSearchTerm();
+		this.model.getRequest(this.showResults);
 	};
-
-};
+	this.showResults = function() {
+		// prints results to page
+		// clear out search-results div first
+		$('.search-results').empty();
+		// start the print of each video
+		// thumb, url link, description
+		for (item in state.items) {
+			var videoId = state.items[item].id.videoId;
+			var videoURL = 'https://www.youtube.com/watch?v=' + videoId;
+			var item = state.items[item].snippet;
+			$('.search-results').append("<div class='video-card'>" + "<div class='top-section'>" + "<p class='title'>" + item.title + "</p>" + "<p class='description'>" + item.description + "</p>" + "</div>" + "<a href='" + videoURL + "'>" + "<img src='" + item.thumbnails.medium.url + "'>" + "</a>" + "<div>");
+		};
+	};
+}
